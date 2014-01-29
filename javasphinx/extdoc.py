@@ -5,17 +5,22 @@ from docutils import nodes, utils
 from sphinx.util.nodes import split_explicit_title
 
 def get_javadoc_ref(app, rawtext, text):
+
+    javadoc_java_version = app.config.javadoc_java_version
+    if javadoc_java_version not in ('1.5.0', '6', '7'):
+        javadoc_java_version = '6'
+
     javadoc_url_map = app.config.javadoc_url_map
 
     # Add default Java SE sources
     if not javadoc_url_map.get("java"):
-        javadoc_url_map["java"] = ("http://docs.oracle.com/javase/6/docs/api", 'javadoc')
+        javadoc_url_map["java"] = ("http://docs.oracle.com/javase/"+ javadoc_java_version +"/docs/api", 'javadoc')
     if not javadoc_url_map.get("javax"):
-        javadoc_url_map["javax"] = ("http://docs.oracle.com/javase/6/docs/api", 'javadoc')
+        javadoc_url_map["javax"] = ("http://docs.oracle.com/javase/"+ javadoc_java_version +"/docs/api", 'javadoc')
     if not javadoc_url_map.get("org.xml"):
-        javadoc_url_map["org.xml"] = ("http://docs.oracle.com/javase/6/docs/api", 'javadoc')
+        javadoc_url_map["org.xml"] = ("http://docs.oracle.com/javase/"+ javadoc_java_version +"/docs/api", 'javadoc')
     if not javadoc_url_map.get("org.w3c"):
-        javadoc_url_map["org.w3c"] = ("http://docs.oracle.com/javase/6/docs/api", 'javadoc')
+        javadoc_url_map["org.w3c"] = ("http://docs.oracle.com/javase/"+ javadoc_java_version +"/docs/api", 'javadoc')
 
     source = None
     package = ''
