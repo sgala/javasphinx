@@ -65,6 +65,7 @@ def write_documents(documents, sources, opts):
 
     # Write individual documents
     for fullname, (package, name, document) in documents.items():
+        print "file", fullname, package, name
         package_path = package.replace('.', os.sep)
         filebasename = name.replace('.', '-')
         filename = filebasename + '.' + opts.suffix
@@ -95,10 +96,13 @@ def write_documents(documents, sources, opts):
 
     # Write package-index for each package
     for package, index in package_contents.items():
+        print "Index:", index
         doc = util.Document()
         doc.add_heading(package, '=')
 
         doc.add_object(util.Directive('java:package', package))
+
+        #doc.add_
 
         toc = util.Directive('toctree')
         toc.add_option('maxdepth', '1')

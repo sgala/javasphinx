@@ -73,6 +73,13 @@ class JavadocRestCompiler(object):
             # Type reference (default)
             return ':java:ref:`%s`' % (see.replace('#', '.').replace(' ', ''),)
 
+    def compile_package(self, package):
+        doc = self.__output_doc(package)
+        directive = util.Directive('java:package', package.name)
+        directive.add_content(doc)
+
+        return directive
+
     def compile_type(self, declaration):
         signature = util.StringBuilder()
         formatter.output_declaration(declaration, signature)
@@ -186,6 +193,12 @@ class JavadocRestCompiler(object):
 
         return directive
 
+    def compile_package_document(self, package):
+        """ Compile a package-index document for a package with javadocs in package-info.java  """
+        return self.compile_package(package)
+
+        
+
     def compile_type_document(self, imports_block, package, name, declaration):
         """ Compile a complete document, documenting a type and its members """
 
@@ -281,6 +294,13 @@ class JavadocRestCompiler(object):
             raise ValueError('File must have package declaration')
 
         package = ast.package.name
+
+        # package-level Javadocs here
+        if ast.package.documentation:
+            print "****package javadocs"
+            package_document = self.compile_package_document(ast.package)
+            documents[package] = (package, 'package-info', package_document.build())
+
         type_declarations = []
         for path, node in ast.filter(javalang.tree.TypeDeclaration):
             if not self.filter(node):
